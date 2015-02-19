@@ -1,0 +1,6 @@
+var config = {};
+
+config.working_dir = "/home/..";
+config.http_port = 8080;
+
+module.exports = config;
