@@ -1,18 +1,32 @@
 var exec = require('child_process').exec,
     Q = require("q"),
     http = require("http"),
-    config = require("./config");
+    config = require("./config"),
+    director = require('director');
+
+var router = new director.http.Router({
+    '/lollipop3': {
+        get: function () {
+            var _this = this;
+            _this.res.writeHead(200, {"Content-Type": "text/plain"});
+            doPull()
+                .then(function (data) {
+                    _this.res.end(data);
+                }, function (error) {
+                    _this.res.end(error);
+                });
+        }
+    }
+});
 
 var server_instance = http.createServer(function(request, response){
-    response.writeHeader(200, {"Content-Type": "text/plain"});
-    doPull()
-        .then(function (data) {
-            response.write(data);
-        }, function (error) {
-            response.write(error);
-        }).done(function () {
+    router.dispatch(request, response, function (err) {
+        if (err) {
+            response.writeHeader(404);
+            response.write("404");
             response.end();
-        });
+        }
+    });
 
 }).listen(config.http_port);
 console.log("Server started.");

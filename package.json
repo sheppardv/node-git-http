@@ -4,6 +4,7 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
+    "director": "^1.2.8",
     "q": "^1.1.2"
   },
   "devDependencies": {},
